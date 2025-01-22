@@ -1,0 +1,193 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**TEXT SUMMARIZATION TOOL**\n",
+        "1. CREATE A TOOL THAT SUMMARIZES LENGTHY ARTICLES USING NATURAL LANGUAGE PROCESSING TECHNIQUES.\n",
+        "2. DELIVERABLE: A PYTHON SCRIPT SHOWCASING INPUT TEXT AND CONCISE SUMMARIES.\n",
+        "\n",
+        "**EXAMPLE**\n",
+        "- Swami Vivekananda and His 1893 Speech: https://www.artic.edu/swami-vivekananda-and-his-1893-speech"
+      ],
+      "metadata": {
+        "id": "kLl-tLA1R1yF"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install sumy"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "uIVu-cM80PTq",
+        "outputId": "91a9f938-80ff-4b51-f08c-8bd4aaa915cc"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting sumy\n",
+            "  Downloading sumy-0.11.0-py2.py3-none-any.whl.metadata (7.5 kB)\n",
+            "Collecting docopt<0.7,>=0.6.1 (from sumy)\n",
+            "  Downloading docopt-0.6.2.tar.gz (25 kB)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting breadability>=0.1.20 (from sumy)\n",
+            "  Downloading breadability-0.1.20.tar.gz (32 kB)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Requirement already satisfied: requests>=2.7.0 in /usr/local/lib/python3.11/dist-packages (from sumy) (2.32.3)\n",
+            "Collecting pycountry>=18.2.23 (from sumy)\n",
+            "  Downloading pycountry-24.6.1-py3-none-any.whl.metadata (12 kB)\n",
+            "Requirement already satisfied: nltk>=3.0.2 in /usr/local/lib/python3.11/dist-packages (from sumy) (3.9.1)\n",
+            "Requirement already satisfied: chardet in /usr/local/lib/python3.11/dist-packages (from breadability>=0.1.20->sumy) (5.2.0)\n",
+            "Requirement already satisfied: lxml>=2.0 in /usr/local/lib/python3.11/dist-packages (from breadability>=0.1.20->sumy) (5.3.0)\n",
+            "Requirement already satisfied: click in /usr/local/lib/python3.11/dist-packages (from nltk>=3.0.2->sumy) (8.1.8)\n",
+            "Requirement already satisfied: joblib in /usr/local/lib/python3.11/dist-packages (from nltk>=3.0.2->sumy) (1.4.2)\n",
+            "Requirement already satisfied: regex>=2021.8.3 in /usr/local/lib/python3.11/dist-packages (from nltk>=3.0.2->sumy) (2024.11.6)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.11/dist-packages (from nltk>=3.0.2->sumy) (4.67.1)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests>=2.7.0->sumy) (3.4.1)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests>=2.7.0->sumy) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests>=2.7.0->sumy) (2.3.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests>=2.7.0->sumy) (2024.12.14)\n",
+            "Downloading sumy-0.11.0-py2.py3-none-any.whl (97 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m97.3/97.3 kB\u001b[0m \u001b[31m3.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pycountry-24.6.1-py3-none-any.whl (6.3 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m6.3/6.3 MB\u001b[0m \u001b[31m55.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hBuilding wheels for collected packages: breadability, docopt\n",
+            "  Building wheel for breadability (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for breadability: filename=breadability-0.1.20-py2.py3-none-any.whl size=21691 sha256=5ca5542d3611261eee2bac4ec9043473576136a489f9ba59340840e7b5ec3e6d\n",
+            "  Stored in directory: /root/.cache/pip/wheels/4d/57/58/7e3d7fedf51fe248b7fcee3df6945ae28638e22cddf01eb92b\n",
+            "  Building wheel for docopt (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for docopt: filename=docopt-0.6.2-py2.py3-none-any.whl size=13706 sha256=185eca929a63ec20bfd28b3952ecf896e73c5014065935258537869cf59cd27f\n",
+            "  Stored in directory: /root/.cache/pip/wheels/1a/b0/8c/4b75c4116c31f83c8f9f047231251e13cc74481cca4a78a9ce\n",
+            "Successfully built breadability docopt\n",
+            "Installing collected packages: docopt, pycountry, breadability, sumy\n",
+            "Successfully installed breadability-0.1.20 docopt-0.6.2 pycountry-24.6.1 sumy-0.11.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "nltk.download('punkt')\n",
+        "nltk.download('punkt_tab')\n",
+        "nltk.download('stopwords')\n",
+        "import spacy\n",
+        "from sumy.parsers.plaintext import PlaintextParser\n",
+        "from sumy.nlp.tokenizers import Tokenizer\n",
+        "from sumy.summarizers.lsa import LsaSummarizer\n",
+        "from sumy.summarizers.luhn import LuhnSummarizer\n",
+        "from sumy.summarizers.text_rank import TextRankSummarizer"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rJbs8O1T9sUe",
+        "outputId": "5e86e82a-9802-4b4c-95c2-2e391d3e3146",
+        "collapsed": true
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "[nltk_data] Downloading package punkt to /root/nltk_data...\n",
+            "[nltk_data]   Package punkt is already up-to-date!\n",
+            "[nltk_data] Downloading package punkt_tab to /root/nltk_data...\n",
+            "[nltk_data]   Package punkt_tab is already up-to-date!\n",
+            "[nltk_data] Downloading package stopwords to /root/nltk_data...\n",
+            "[nltk_data]   Package stopwords is already up-to-date!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "- Use LSA for long, well-structured documents where thematic understanding is important.\n",
+        "- Use Luhn for quick summarization tasks on short or moderately sized documents.\n",
+        "- Use TextRank for more nuanced and context-aware summarization. It is generally a robust choice for most tasks."
+      ],
+      "metadata": {
+        "id": "kjqf7Z613nzx"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def summarize_text(input_text, method=\"lsa\", sentence_count=2):\n",
+        "    parser = PlaintextParser.from_string(input_text, Tokenizer(\"english\"))\n",
+        "\n",
+        "    if method == \"lsa\":\n",
+        "        summarizer = LsaSummarizer()\n",
+        "    elif method == \"luhn\":\n",
+        "        summarizer = LuhnSummarizer()\n",
+        "    elif method == \"textrank\":\n",
+        "        summarizer = TextRankSummarizer()\n",
+        "    else:\n",
+        "        raise ValueError(\"Invalid summarization method. Choose from 'lsa', 'luhn', or 'textrank'.\")\n",
+        "\n",
+        "    summary = summarizer(parser.document, sentence_count)\n",
+        "    summarized_text = \"\\n\".join(str(sentence) for sentence in summary)\n",
+        "\n",
+        "    return summarized_text\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    input_text = input(\"Enter the text you want to summarize: \")\n",
+        "    print(\"\\nOriginal Text:\")\n",
+        "    print(input_text)\n",
+        "    print(\"\\nSummary:\")\n",
+        "    summary = summarize_text(input_text, method=\"lsa\", sentence_count=2)\n",
+        "    print(summary)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "FC-zI8lq3E14",
+        "outputId": "092f6317-571e-464a-d379-473369c46b01"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Enter the text you want to summarize: Sisters and Brothers of America,  It fills my heart with joy unspeakable to rise in response to the warm and cordial welcome which you have given us. I thank you in the name of the most ancient order of monks in the world, I thank you in the name of the mother of religions, and I thank you in the name of millions and millions of Hindu people of all classes and sects.  My thanks, also, to some of the speakers on this platform who, referring to the delegates from the Orient, have told you that these men from far-off nations may well claim the honor of bearing to different lands the idea of toleration. I am proud to belong to a religion which has taught the world both tolerance and universal acceptance. We believe not only in universal toleration, but we accept all religions as true. I am proud to belong to a nation which has sheltered the persecuted and the refugees of all religions and all nations of the earth. I am proud to tell you that we have gathered in our bosom the purest remnant of the Israelites, who came to Southern India and took refuge with us in the very year in which their holy temple was shat­tered to pieces by Roman tyranny. I am proud to belong to the religion which has sheltered and is still fostering the remnant of the grand Zoroastrian nation. I will quote to you, brethren, a few lines from a hymn which I remember to have repeated from my earliest boyhood, which is every day repeated by millions of human beings: “As the different streams having their sources in different paths which men take through different tendencies, various though they appear, crooked or straight, all lead to Thee.”  The present convention, which is one of the most august assemblies ever held, is in itself a vindication, a declaration to the world of the wonderful doctrine preached in the Gita: “Whosoever comes to Me, through whatsoever form, I reach him; all men are struggling through paths which in the end lead to me.” Sectarianism, bigotry, and its horrible descen­dant, fanaticism, have long possessed this beautiful earth. They have filled the earth with vio­lence, drenched it often and often with human blood, destroyed civilization and sent whole nations to despair. Had it not been for these horrible demons, human society would be far more advanced than it is now. But their time is come; and I fervently hope that the bell that tolled this morning in honor of this convention may be the death-knell of all fanaticism, of all persecutions with the sword or with the pen, and of all uncharitable feelings between persons wending their way to the same goal.\n",
+            "\n",
+            "Original Text:\n",
+            "Sisters and Brothers of America,  It fills my heart with joy unspeakable to rise in response to the warm and cordial welcome which you have given us. I thank you in the name of the most ancient order of monks in the world, I thank you in the name of the mother of religions, and I thank you in the name of millions and millions of Hindu people of all classes and sects.  My thanks, also, to some of the speakers on this platform who, referring to the delegates from the Orient, have told you that these men from far-off nations may well claim the honor of bearing to different lands the idea of toleration. I am proud to belong to a religion which has taught the world both tolerance and universal acceptance. We believe not only in universal toleration, but we accept all religions as true. I am proud to belong to a nation which has sheltered the persecuted and the refugees of all religions and all nations of the earth. I am proud to tell you that we have gathered in our bosom the purest remnant of the Israelites, who came to Southern India and took refuge with us in the very year in which their holy temple was shat­tered to pieces by Roman tyranny. I am proud to belong to the religion which has sheltered and is still fostering the remnant of the grand Zoroastrian nation. I will quote to you, brethren, a few lines from a hymn which I remember to have repeated from my earliest boyhood, which is every day repeated by millions of human beings: “As the different streams having their sources in different paths which men take through different tendencies, various though they appear, crooked or straight, all lead to Thee.”  The present convention, which is one of the most august assemblies ever held, is in itself a vindication, a declaration to the world of the wonderful doctrine preached in the Gita: “Whosoever comes to Me, through whatsoever form, I reach him; all men are struggling through paths which in the end lead to me.” Sectarianism, bigotry, and its horrible descen­dant, fanaticism, have long possessed this beautiful earth. They have filled the earth with vio­lence, drenched it often and often with human blood, destroyed civilization and sent whole nations to despair. Had it not been for these horrible demons, human society would be far more advanced than it is now. But their time is come; and I fervently hope that the bell that tolled this morning in honor of this convention may be the death-knell of all fanaticism, of all persecutions with the sword or with the pen, and of all uncharitable feelings between persons wending their way to the same goal.\n",
+            "\n",
+            "Summary:\n",
+            "I am proud to tell you that we have gathered in our bosom the purest remnant of the Israelites, who came to Southern India and took refuge with us in the very year in which their holy temple was shat­tered to pieces by Roman tyranny.\n",
+            "I will quote to you, brethren, a few lines from a hymn which I remember to have repeated from my earliest boyhood, which is every day repeated by millions of human beings: “As the different streams having their sources in different paths which men take through different tendencies, various though they appear, crooked or straight, all lead to Thee.”  The present convention, which is one of the most august assemblies ever held, is in itself a vindication, a declaration to the world of the wonderful doctrine preached in the Gita: “Whosoever comes to Me, through whatsoever form, I reach him; all men are struggling through paths which in the end lead to me.” Sectarianism, bigotry, and its horrible descen­dant, fanaticism, have long possessed this beautiful earth.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
