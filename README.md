@@ -1,5 +1,8 @@
 # Text Summarization Tool
 
+
+## Description
+
 This Python script provides a tool for summarizing lengthy articles using Natural Language Processing (NLP) techniques. It leverages the `sumy` library to extract concise summaries from input text.
 
 ## Features
