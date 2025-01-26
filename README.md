@@ -1,5 +1,15 @@
 # Text Summarization Tool
+**Company**: CODTECH IT SOLUTIONS PVT.LTD
 
+**Name**: Ankur Datta
+
+**Intern ID**: CT08JSJ
+
+**Domain**: Artificial Intelligence
+
+**Batch Duration**: January 5th, 2025 to February 5th, 2025
+
+**Mentor Name**: Neela Santhosh 
 
 ## Description
 
